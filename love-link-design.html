@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love-link - Valentine's Connection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --rose-bloom: #FF6B9D;
+            --deep-rose: #C44569;
+            --blush-pink: #FFE5EC;
+            --cream: #FFF5F7;
+            --velvet: #8B4367;
+            --gold-shimmer: #FFD700;
+            --midnight: #2C1B3D;
+            --soft-shadow: rgba(196, 69, 105, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--blush-pink) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating hearts background animation */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart-float {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.15;
+            animation: float-up 15s infinite ease-in-out;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.15;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: white;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Splash Screen */
+        .splash-screen {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--rose-bloom) 0%, var(--deep-rose) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .splash-heart {
+            font-size: 120px;
+            animation: heartbeat 1.5s infinite, rotate 3s infinite ease-in-out;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+        }
+
+        @keyframes rotate {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .splash-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            margin-top: 30px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            letter-spacing: 2px;
+        }
+
+        .splash-subtitle {
+            color: var(--blush-pink);
+            font-size: 16px;
+            margin-top: 10px;
+            font-weight: 300;
+            letter-spacing: 3px;
+        }
+
+        /* Home Screen */
+        .home-screen {
+            padding: 40px 24px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        .app-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--deep-rose);
+            margin-bottom: 8px;
+        }
+
+        .tagline {
+            color: var(--velvet);
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 30px var(--soft-shadow);
+            border: 1px solid var(--blush-pink);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px var(--soft-shadow);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--blush-pink) 0%, transparent 70%);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--midnight);
+            margin-bottom: 12px;
+        }
+
+        .card-description {
+            color: var(--velvet);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--rose-bloom) 0%, var(--deep-rose) 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 30px rgba(255, 107, 157, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--cream);
+            color: var(--deep-rose);
+            border: 2px solid var(--rose-bloom);
+        }
+
+        .btn-secondary:hover {
+            background: var(--blush-pink);
+        }
+
+        /* Create Invite Screen */
+        .create-screen {
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            color: var(--deep-rose);
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-4px);
+        }
+
+        .screen-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--midnight);
+            margin-bottom: 8px;
+        }
+
+        .screen-subtitle {
+            color: var(--velvet);
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--midnight);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--blush-pink);
+            border-radius: 12px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--rose-bloom);
+            box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.1);
+        }
+
+        textarea.form-input {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .date-time-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .theme-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .theme-option {
+            aspect-ratio: 1;
+            border-radius: 16px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-option.selected {
+            border-color: var(--rose-bloom);
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px var(--soft-shadow);
+        }
+
+        .theme-romantic {
+            background: linear-gradient(135deg, #FF6B9D 0%, #C44569 100%);
+        }
+
+        .theme-elegant {
+            background: linear-gradient(135deg, #8B4367 0%, #2C1B3D 100%);
+        }
+
+        .theme-playful {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA07A 100%);
+        }
+
+        .theme-dreamy {
+            background: linear-gradient(135deg, #E0BBE4 0%, #957DAD 100%);
+        }
+
+        .theme-sunset {
+            background: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 100%);
+        }
+
+        .theme-garden {
+            background: linear-gradient(135deg, #92FFC0 0%, #5ECFA7 100%);
+        }
+
+        .theme-emoji {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+        }
+
+        /* Preview Screen */
+        .preview-screen {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--rose-bloom) 0%, var(--deep-rose) 100%);
+            padding: 24px;
+        }
+
+        .preview-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 28px;
+            margin-top: 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .preview-heart {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: heartbeat 2s infinite;
+        }
+
+        .preview-message {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--midnight);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .preview-from {
+            color: var(--velvet);
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .preview-details {
+            background: var(--cream);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: var(--midnight);
+            font-size: 15px;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-icon {
+            font-size: 20px;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .share-section {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 2px dashed var(--blush-pink);
+        }
+
+        .share-title {
+            font-weight: 600;
+            color: var(--midnight);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .share-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--cream);
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .share-link input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 13px;
+            color: var(--velvet);
+        }
+
+        .copy-btn {
+            background: var(--rose-bloom);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--deep-rose);
+        }
+
+        /* Response Screen */
+        .response-screen {
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .response-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 40px;
+        }
+
+        .response-emoji {
+            font-size: 100px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .response-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .response-btn {
+            padding: 24px;
+            border-radius: 16px;
+            border: none;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, var(--rose-bloom) 0%, var(--deep-rose) 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(255, 107, 157, 0.6);
+        }
+
+        .btn-maybe {
+            background: var(--blush-pink);
+            color: var(--deep-rose);
+            border: 2px solid var(--rose-bloom);
+        }
+
+        .btn-maybe:hover {
+            background: var(--cream);
+        }
+
+        .btn-no {
+            background: white;
+            color: var(--velvet);
+            border: 2px solid var(--blush-pink);
+        }
+
+        .btn-no:hover {
+            background: var(--blush-pink);
+        }
+
+        .add-note {
+            margin-top: 24px;
+        }
+
+        /* Success Screen */
+        .success-screen {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--rose-bloom) 0%, var(--deep-rose) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .success-animation {
+            font-size: 120px;
+            animation: celebrate 1s ease;
+            margin-bottom: 30px;
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.2) rotate(-10deg); }
+            50% { transform: scale(1.3) rotate(10deg); }
+            75% { transform: scale(1.2) rotate(-5deg); }
+        }
+
+        .success-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .success-message {
+            color: var(--blush-pink);
+            font-size: 18px;
+            margin-bottom: 40px;
+            max-width: 300px;
+        }
+
+        .nav-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 40px;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--blush-pink);
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            width: 24px;
+            border-radius: 4px;
+            background: var(--rose-bloom);
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating hearts background -->
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <div class="container">
+        <!-- Splash Screen -->
+        <div class="screen active" id="splashScreen">
+            <div class="splash-screen">
+                <div class="splash-heart">💖</div>
+                <h1 class="splash-title">Love-link</h1>
+                <p class="splash-subtitle">VALENTINE'S EDITION</p>
+            </div>
+        </div>
+
+        <!-- Home Screen -->
+        <div class="screen" id="homeScreen">
+            <div class="home-screen">
+                <div class="header">
+                    <div class="logo">💘</div>
+                    <h1 class="app-title">Love-link</h1>
+                    <p class="tagline">Make this Valentine's unforgettable</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-icon">✨</span>
+                        <h2 class="card-title">Create an Invite</h2>
+                        <p class="card-description">Craft a personalized Valentine's invitation and share it with someone special.</p>
+                        <button class="btn btn-primary" onclick="showScreen('createScreen')">
+                            <span style="position: relative; z-index: 1;">Start Creating</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-icon">💌</span>
+                        <h2 class="card-title">Received an Invite?</h2>
+                        <p class="card-description">Someone sent you a Love-link! Enter your code to see their invitation.</p>
+                        <button class="btn btn-secondary" onclick="showScreen('responseScreen')">
+                            <span style="position: relative; z-index: 1;">View Invite</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="nav-dots">
+                    <div class="nav-dot active"></div>
+                    <div class="nav-dot"></div>
+                    <div class="nav-dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Invite Screen -->
+        <div class="screen" id="createScreen">
+            <div class="create-screen">
+                <button class="back-btn" onclick="showScreen('homeScreen')">← </button>
+                
+                <h2 class="screen-title">Create Your Invite</h2>
+                <p class="screen-subtitle">Fill in the details to create a magical invitation</p>
+
+                <form id="inviteForm">
+                    <div class="form-group">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-input" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Message to Your Valentine</label>
+                        <textarea class="form-input" placeholder="Write something sweet..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Date & Time</label>
+                        <div class="date-time-group">
+                            <input type="date" class="form-input" required>
+                            <input type="time" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-input" placeholder="Where should we meet?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Choose a Theme</label>
+                        <div class="theme-selector">
+                            <div class="theme-option theme-romantic selected" onclick="selectTheme(this)">
+                                <span class="theme-emoji">💗</span>
+                            </div>
+                            <div class="theme-option theme-elegant" onclick="selectTheme(this)">
+                                <span class="theme-emoji">🌹</span>
+                            </div>
+                            <div class="theme-option theme-playful" onclick="selectTheme(this)">
+                                <span class="theme-emoji">🎉</span>
+                            </div>
+                            <div class="theme-option theme-dreamy" onclick="selectTheme(this)">
+                                <span class="theme-emoji">✨</span>
+                            </div>
+                            <div class="theme-option theme-sunset" onclick="selectTheme(this)">
+                                <span class="theme-emoji">🌅</span>
+                            </div>
+                            <div class="theme-option theme-garden" onclick="selectTheme(this)">
+                                <span class="theme-emoji">🌸</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" onclick="showScreen('previewScreen')" style="margin-top: 32px;">
+                        <span style="position: relative; z-index: 1;">Preview & Share</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Preview Screen -->
+        <div class="screen" id="previewScreen">
+            <div class="preview-screen">
+                <button class="back-btn" onclick="showScreen('createScreen')" style="color: white;">←</button>
+                
+                <div class="preview-card">
+                    <div class="preview-heart">💖</div>
+                    <h3 class="preview-message">Will you be my Valentine?</h3>
+                    <p class="preview-from">From: Alex</p>
+                    
+                    <div class="preview-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">📅</span>
+                            <span>February 14, 2026 at 7:00 PM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>The Rooftop Garden</span>
+                        </div>
+                    </div>
+
+                    <p style="color: var(--velvet); font-style: italic; line-height: 1.6;">
+                        "I'd love to spend this Valentine's with you. Let's make it a night to remember under the stars."
+                    </p>
+
+                    <div class="share-section">
+                        <p class="share-title">Share your Love-link</p>
+                        <div class="share-link">
+                            <input type="text" value="love-link.app/v/abc123xyz" readonly>
+                            <button class="copy-btn" onclick="copyLink()">Copy</button>
+                        </div>
+                        <button class="btn btn-primary">
+                            <span style="position: relative; z-index: 1;">Share via Message</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Response Screen -->
+        <div class="screen" id="responseScreen">
+            <div class="response-screen">
+                <button class="back-btn" onclick="showScreen('homeScreen')">←</button>
+                
+                <div class="response-header">
+                    <span class="response-emoji">💝</span>
+                    <h2 class="screen-title">Alex is asking...</h2>
+                    <p class="screen-subtitle">"Will you be my Valentine?"</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <div class="preview-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📅</span>
+                                <span>February 14, 2026 at 7:00 PM</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <span>The Rooftop Garden</span>
+                            </div>
+                        </div>
+                        <p style="color: var(--velvet); font-style: italic; line-height: 1.6; margin-top: 16px;">
+                            "I'd love to spend this Valentine's with you. Let's make it a night to remember under the stars."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="response-buttons">
+                    <button class="response-btn btn-yes" onclick="showScreen('successScreen')">
+                        <span>💕</span>
+                        <span>Yes! I'd love to</span>
+                    </button>
+                    <button class="response-btn btn-maybe">
+                        <span>🤔</span>
+                        <span>Maybe, let me check</span>
+                    </button>
+                    <button class="response-btn btn-no">
+                        <span>💔</span>
+                        <span>Sorry, I can't make it</span>
+                    </button>
+                </div>
+
+                <div class="add-note">
+                    <label class="form-label">Add a personal note (optional)</label>
+                    <textarea class="form-input" placeholder="Write a message back..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Screen -->
+        <div class="screen" id="successScreen">
+            <div class="success-screen">
+                <div class="success-animation">🎊</div>
+                <h2 class="success-title">It's a Date!</h2>
+                <p class="success-message">Alex has been notified of your response. Get ready for an amazing Valentine's!</p>
+                <button class="btn btn-primary" onclick="showScreen('homeScreen')" style="max-width: 300px;">
+                    <span style="position: relative; z-index: 1;">Back to Home</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize floating hearts
+        function createFloatingHearts() {
+            const heartsBg = document.getElementById('heartsBg');
+            const hearts = ['💕', '💖', '💗', '💓', '💝'];
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-float';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 15 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heartsBg.appendChild(heart);
+            }
+        }
+
+        // Show splash screen then home
+        setTimeout(() => {
+            showScreen('homeScreen');
+        }, 2500);
+
+        // Screen navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Theme selection
+        function selectTheme(element) {
+            document.querySelectorAll('.theme-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+        }
+
+        // Copy link
+        function copyLink() {
+            const input = document.querySelector('.share-link input');
+            input.select();
+            document.execCommand('copy');
+            
+            const btn = document.querySelector('.copy-btn');
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+            }, 2000);
+        }
+
+        // Initialize
+        createFloatingHearts();
+    </script>
+</body>
+</html>
